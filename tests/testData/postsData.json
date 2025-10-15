@@ -1,0 +1,9 @@
+{
+  "validPost": {
+    "id": 99,
+    "userId": 10
+  },
+  "invalidPost": {
+    "id": 150
+  }
+}
