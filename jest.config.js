@@ -14,6 +14,7 @@ export default {
     }],
   },
   testMatch: ['**/tests/**/*.test.ts'],
+  setupFilesAfterEnv:["jest-extended/all"],
   moduleFileExtensions: ['ts', 'js', 'json'],
   collectCoverageFrom: ['src/**/*.ts'],
 };

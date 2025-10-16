@@ -1,7 +1,7 @@
 import { PostsApi } from '../src/api/postApi';
 import postsData from './testData/postsData.json' 
 import { faker } from '@faker-js/faker';
-
+import 'jest-extended';
 
 describe('Posts API', () => {
   const postsApi = new PostsApi();
@@ -12,8 +12,9 @@ describe('Posts API', () => {
   expect(response.status).toBe(200);
 
   expect(response.headers['content-type']).toMatch(/application\/json/);
-  expect(Array.isArray(response.data)).toBe(true);
-  expect(response.data.length).toBeGreaterThan(0);
+  
+  expect(response.data).toBeArray();
+  expect(response.data).not.toBeEmpty();
 
   const ids = response.data.map(p => p.id);
   const sortedIds = [...ids].sort((a, b) => a - b);
@@ -26,17 +27,14 @@ describe('Posts API', () => {
     const { status, data } = await postsApi.getPostById(validPost.id);
 
     expect(status).toBe(200);
+    expect(data).toContainKeys(['id', 'userId', 'title', 'body']);
     expect(data).toMatchObject({
       id: validPost.id,
       userId: validPost.userId,
     });
 
-    if ('title' in data && 'body' in data) {
-      expect(data.title).toBeTruthy();
-      expect(data.body).toBeTruthy();
-    } else {
-      throw new Error('Data does not contain expected fields');
-    }
+    expect(data).toHaveProperty('title', expect.stringMatching(/\S/));
+    expect(data).toHaveProperty('body', expect.stringMatching(/\S/));
   });
   
   test('3. Get post with invalid ID returns 404', async () => {
@@ -45,7 +43,7 @@ describe('Posts API', () => {
     const { status, data } = await postsApi.getPostById(invalidPost.id);
 
     expect(status).toBe(404);
-    expect(data).toEqual({});
+    expect(data).toBeEmptyObject(); 
   });
 
   test('4. Create post with userId=1 and random body/title', async () => {
@@ -58,6 +56,7 @@ describe('Posts API', () => {
     const response = await postsApi.createPost(requestData);
 
     expect(response.status).toBe(201);
+    expect(response.data).toContainKeys(['title', 'body', 'userId', 'id']);
     expect(response.data).toMatchObject({
       title: requestData.title,
       body: requestData.body,
