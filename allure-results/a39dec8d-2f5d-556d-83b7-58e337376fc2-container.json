@@ -1,1 +1,0 @@
-{"uuid":"a39dec8d-2f5d-556d-83b7-58e337376fc2","name":"Posts API 4. Create post with userId=1 and random body/title (0)","children":["548fa4b6-3fc4-4549-b7c4-83391cb4e6e6"],"befores":[{"name":"Reset mocks, modules and timers (Jest)","start":1760973275464,"stop":1760973275469,"stage":"finished","status":"passed","statusDetails":{},"attachments":[],"parameters":[]}],"afters":[]}
