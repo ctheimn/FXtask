@@ -5,7 +5,7 @@ import usersData from './testData/userData.json';
 describe('Users API Tests', () => {
   const api = new UsersApi();
   let initialUser: User;
-  const { user5 } = usersData
+  const { user5 } = usersData;
 
   beforeAll(async () => {
     const response = await api.getUserById(user5.id);
@@ -21,7 +21,7 @@ describe('Users API Tests', () => {
     expect(response.data).toBeArray();
     expect(response.data).not.toBeEmpty();
 
-    const actualUser = response.data.find((u: any) => u.id === expectedUser.id);
+    const actualUser = response.data.find(u => u.id === expectedUser.id);
 
     expect(actualUser).toEqual(
       expect.objectContaining({

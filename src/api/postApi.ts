@@ -1,6 +1,6 @@
-import { ApiClient } from './apiClient'
-import { Post } from '../models/Post'
-import { AxiosResponse } from 'axios'
+import { ApiClient } from './apiClient';
+import { Post } from '../models/Post';
+import { AxiosResponse } from 'axios';
 
 export class PostsApi {
   private api: ApiClient;
@@ -14,8 +14,8 @@ export class PostsApi {
     return this.api.get<Post[]>('/posts');
   }
 
-  async getPostById(id: number): Promise<AxiosResponse<Post | {}>> {
-    return this.api.get<Post | {}>(`/posts/${id}`);
+  async getPostById(id: number): Promise<AxiosResponse<Post | object>> {
+    return this.api.get<Post | object>(`/posts/${id}`);
   }
 
   async createPost(postData: Omit<Post, 'id'>): Promise<AxiosResponse<Post>> {

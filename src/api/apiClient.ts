@@ -1,6 +1,12 @@
 import axios, { AxiosInstance, AxiosResponse, AxiosRequestConfig } from 'axios';
-import { BASE_URL } from '../config'
-declare const allure: any;
+import { BASE_URL } from '../config';
+
+interface AllureReporter {
+  step<T>(name: string, stepFunction: () => Promise<T>): Promise<T>;
+  attachment(name: string, content: string, type: string): void;
+}
+
+declare const allure: AllureReporter;
 
 
 export class ApiClient {
