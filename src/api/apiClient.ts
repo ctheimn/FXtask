@@ -1,5 +1,7 @@
-import axios, { AxiosInstance, AxiosResponse } from 'axios';
+import axios, { AxiosInstance, AxiosResponse, AxiosRequestConfig } from 'axios';
 import { BASE_URL } from '../config'
+declare const allure: any;
+
 
 export class ApiClient {
   private client: AxiosInstance;
@@ -13,19 +15,55 @@ export class ApiClient {
     });
   }
 
-  async get<T>(endpoint: string, params?: object): Promise<AxiosResponse<T>> {
-    return this.client.get(endpoint, { params });
+  private async runWithAllureStep<T>(
+    method: string,
+    endpoint: string,
+    action: () => Promise<AxiosResponse<T>>,
+    requestBody?: unknown
+  ): Promise<AxiosResponse<T>> {
+    return allure.step(`${method.toUpperCase()} ${endpoint}`, async () => {
+      if (requestBody) {
+        allure.attachment('Request Body', JSON.stringify(requestBody, null, 2), 'application/json');
+      }
+
+      const response = await action();
+
+      allure.attachment('Response Body', JSON.stringify(response.data, null, 2), 'application/json');
+      allure.attachment('Status Code', response.status.toString(), 'text/plain');
+
+      return response;
+    });
   }
 
-  async post<T>(endpoint: string, data: object): Promise<AxiosResponse<T>> {
-    return this.client.post(endpoint, data);
+  async get<T>(endpoint: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
+    return this.runWithAllureStep('GET', endpoint, () => this.client.get(endpoint, config));
   }
 
-  async put<T>(endpoint: string, data: object): Promise<AxiosResponse<T>> {
-    return this.client.put(endpoint, data);
+  async post<T>(endpoint: string, data: object, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
+    return this.runWithAllureStep('POST', endpoint, () => this.client.post(endpoint, data, config), data);
   }
 
-  async delete<T>(endpoint: string): Promise<AxiosResponse<T>> {
-    return this.client.delete(endpoint);
+  async put<T>(endpoint: string, data: object, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
+    return this.runWithAllureStep('PUT', endpoint, () => this.client.put(endpoint, data, config), data);
   }
+
+  async delete<T>(endpoint: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
+    return this.runWithAllureStep('DELETE', endpoint, () => this.client.delete(endpoint, config));
+  }
+
+  // async get<T>(endpoint: string, params?: object): Promise<AxiosResponse<T>> {
+  //   return this.client.get(endpoint, { params });
+  // }
+
+  // async post<T>(endpoint: string, data: object): Promise<AxiosResponse<T>> {
+  //   return this.client.post(endpoint, data);
+  // }
+
+  // async put<T>(endpoint: string, data: object): Promise<AxiosResponse<T>> {
+  //   return this.client.put(endpoint, data);
+  // }
+
+  // async delete<T>(endpoint: string): Promise<AxiosResponse<T>> {
+  //   return this.client.delete(endpoint);
+  // }
 }

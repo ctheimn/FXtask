@@ -11,23 +11,11 @@ export class PostsApi {
 
 
   async getAllPosts(): Promise<AxiosResponse<Post[]>> {
-  return this.api.get<Post[]>('/posts');
-}
+    return this.api.get<Post[]>('/posts');
+  }
 
-  // async getAllPosts(): Promise<Post[]> {
-  //   const response = await this.api.get<Post[]>('/posts');
-  //   return response.data.map(Post.fromJson);
-  // }
-
-  async getPostById(id: number): Promise<{ status: number; data: Post | {} }> {
-    const response = await this.api.get<Post | {}>(`/posts/${id}`, {
-      validateStatus: () => true,
-    });
-
-    return {
-      status: response.status,
-      data: response.data,
-    };
+  async getPostById(id: number): Promise<AxiosResponse<Post | {}>> {
+    return this.api.get<Post | {}>(`/posts/${id}`);
   }
 
   async createPost(postData: Omit<Post, 'id'>): Promise<AxiosResponse<Post>> {
