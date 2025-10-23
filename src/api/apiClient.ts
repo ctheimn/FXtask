@@ -56,20 +56,4 @@ export class ApiClient {
   async delete<T>(endpoint: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
     return this.runWithAllureStep('DELETE', endpoint, () => this.client.delete(endpoint, config));
   }
-
-  // async get<T>(endpoint: string, params?: object): Promise<AxiosResponse<T>> {
-  //   return this.client.get(endpoint, { params });
-  // }
-
-  // async post<T>(endpoint: string, data: object): Promise<AxiosResponse<T>> {
-  //   return this.client.post(endpoint, data);
-  // }
-
-  // async put<T>(endpoint: string, data: object): Promise<AxiosResponse<T>> {
-  //   return this.client.put(endpoint, data);
-  // }
-
-  // async delete<T>(endpoint: string): Promise<AxiosResponse<T>> {
-  //   return this.client.delete(endpoint);
-  // }
 }

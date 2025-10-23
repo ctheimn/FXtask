@@ -1,9 +1,50 @@
 import { PostsApi } from '../src/api/postApi';
 import postsData from './testData/postsData.json'; 
 import { faker } from '@faker-js/faker';
-
+import mb from 'mountebank';
 describe('Posts API', () => {
   const postsApi = new PostsApi();
+  const mockData = {
+    userId: postsData.validPost.userId,
+    title: faker.lorem.sentence(),
+    body: faker.lorem.paragraph(),
+  };
+
+  beforeAll(async () => {
+    await mb.create({
+      port: 4545,
+      protocol: 'http',
+      name: 'jsonplaceholder-proxy-with-post-mock',
+      stubs: [
+        {
+          predicates: [
+            {
+              equals: {
+                method: 'POST',
+                path: '/posts',
+              },
+            },
+          ],
+          responses: [
+            {
+              is: {
+                statusCode: 201,
+                headers: { 'Content-Type': 'application/json' },
+                body: {
+                  id: 101,
+                  ...mockData,
+                },
+              },
+            },
+          ],
+        },
+      ],
+      proxy: {
+        to: 'https://jsonplaceholder.typicode.com',
+        mode: 'proxyAlways',
+      },
+    });
+  });
 
   test('1. Get all posts', async () => {
     const response = await postsApi.getAllPosts();
@@ -17,13 +58,13 @@ describe('Posts API', () => {
   });
 
   test('2. Get post with valid ID returns correct data', async () => {
-    const { validPost } = postsData;
-    const { status, data } = await postsApi.getPostById(validPost.id);
+    const { validPost2 } = postsData;
+    const { status, data } = await postsApi.getPostById(validPost2.id);
 
     expect(status).toBe(200);
     expect(data).toMatchObject({
-      id: validPost.id,
-      userId: validPost.userId,
+      id: validPost2.id,
+      userId: validPost2.userId,
       title: expect.any(String),
       body: expect.any(String),
     });
@@ -42,8 +83,8 @@ describe('Posts API', () => {
   test('4. Create post with userId=1 and random body/title', async () => {
     const requestData = {
       userId: postsData.validPost.userId,
-      title: faker.lorem.sentence(),
-      body: faker.lorem.paragraph(),
+      title: mockData.title,
+      body: mockData.body,
     };
 
     const response = await postsApi.createPost(requestData);
@@ -51,9 +92,9 @@ describe('Posts API', () => {
     expect(response.status).toBe(201);
     expect(response.data).toMatchObject({
       id: expect.any(Number),
-      title: requestData.title,
-      body: requestData.body,
-      userId: requestData.userId,
+      title: mockData.title,
+      body: mockData.body,
+      userId: mockData.userId,
     });
   });
 

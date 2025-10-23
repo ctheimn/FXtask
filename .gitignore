@@ -141,3 +141,6 @@ vite.config.ts.timestamp-*
 # Allure artifacts
 allure-results/
 allure-report/
+
+# Ignore mountebank log files
+mb*.log
