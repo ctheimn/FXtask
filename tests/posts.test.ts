@@ -1,5 +1,5 @@
 import { PostsApi } from '../src/api/postApi';
-import postsData from './testData/postsData.json' 
+import postsData from './testData/postsData.json'; 
 import { faker } from '@faker-js/faker';
 
 describe('Posts API', () => {

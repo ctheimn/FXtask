@@ -14,7 +14,7 @@ export default {
   },
   testMatch: ['**/tests/**/*.test.ts'],
   reporters: ['default', ['jest-allure2-reporter', {resultsDir: './allure-results'}]],
-  setupFilesAfterEnv:["jest-extended/all"],
+  setupFilesAfterEnv:['jest-extended/all'],
   moduleFileExtensions: ['ts', 'js', 'json'],
   collectCoverageFrom: ['src/**/*.ts'],
 };

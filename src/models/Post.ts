@@ -11,7 +11,7 @@ export class Post {
     this.body = body;
   }
 
-  static fromJson(json: any): Post {
+  static fromJson(json: Post): Post {
     return new Post({
       userId: json.userId,
       id: json.id,
