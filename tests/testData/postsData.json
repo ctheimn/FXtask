@@ -1,7 +1,23 @@
 {
   "validPost": {
+    "id": 101,
+    "userId": 1
+  },
+  "validPost2": {
     "id": 99,
     "userId": 10
+  },
+  "validPost3": {
+    "id": 2
+  },
+  "mockPost": {
+    "userId": 123456789
+  },
+  "mockPost2": {
+    "userId": 987654321
+  },
+  "mockPost3": {
+    "userId": 777777777
   },
   "invalidPost": {
     "id": 150

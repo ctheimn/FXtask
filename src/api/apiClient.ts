@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse, AxiosRequestConfig } from 'axios';
-import { BASE_URL } from '../config';
+import { MB_BASE_URL, BASE_URL } from '../config';
 
 interface AllureReporter {
   step<T>(name: string, stepFunction: () => Promise<T>): Promise<T>;
@@ -12,7 +12,7 @@ declare const allure: AllureReporter;
 export class ApiClient {
   private client: AxiosInstance;
 
-  constructor(baseUrl: string = BASE_URL) {
+  constructor(baseUrl: string = MB_BASE_URL) {
     this.client = axios.create({
       baseURL: baseUrl,
       timeout: 5000,
@@ -56,20 +56,4 @@ export class ApiClient {
   async delete<T>(endpoint: string, config?: AxiosRequestConfig): Promise<AxiosResponse<T>> {
     return this.runWithAllureStep('DELETE', endpoint, () => this.client.delete(endpoint, config));
   }
-
-  // async get<T>(endpoint: string, params?: object): Promise<AxiosResponse<T>> {
-  //   return this.client.get(endpoint, { params });
-  // }
-
-  // async post<T>(endpoint: string, data: object): Promise<AxiosResponse<T>> {
-  //   return this.client.post(endpoint, data);
-  // }
-
-  // async put<T>(endpoint: string, data: object): Promise<AxiosResponse<T>> {
-  //   return this.client.put(endpoint, data);
-  // }
-
-  // async delete<T>(endpoint: string): Promise<AxiosResponse<T>> {
-  //   return this.client.delete(endpoint);
-  // }
 }
