@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse, AxiosRequestConfig } from 'axios';
-import { BASE_URL } from '../config';
+import { MB_BASE_URL, BASE_URL } from '../config';
 
 interface AllureReporter {
   step<T>(name: string, stepFunction: () => Promise<T>): Promise<T>;
@@ -12,7 +12,7 @@ declare const allure: AllureReporter;
 export class ApiClient {
   private client: AxiosInstance;
 
-  constructor(baseUrl: string = BASE_URL) {
+  constructor(baseUrl: string = MB_BASE_URL) {
     this.client = axios.create({
       baseURL: baseUrl,
       timeout: 5000,
